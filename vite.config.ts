@@ -10,6 +10,7 @@ const __dirname = path.dirname(__filename);
 
 // https://vite.dev/config/
 export default defineConfig({
+  base: "/V1_perkalian robot berlari/",
   plugins: [react(), tailwindcss(), viteSingleFile()],
   resolve: {
     alias: {
