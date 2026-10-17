@@ -2,7 +2,7 @@ import { sfx } from "./audio";
 import { makeQuestion } from "./questions";
 import { BOSSES, type BossDef } from "./bosses";
 import type { Difficulty, GameResult, HudState, Phase, Question } from "./types";
-import monsterSpriteUrl from "../assets/robot-monster.png";
+import monsterSpriteUrl from "../assets/robot-monster-key.png";
 
 export const VIEW_W = 960;
 export const VIEW_H = 540;
