@@ -86,6 +86,7 @@ export default function App() {
   );
   const [muted, setMuted] = useState(false);
   const [showTable, setShowTable] = useState(false);
+  const [showSettings, setShowSettings] = useState(false);
   const [paused, setPaused] = useState(false);
   const [speedMult, setSpeedMult] = useState<1 | 2 | 3>(1);
   const [isFullscreen, setIsFullscreen] = useState(false);
@@ -233,8 +234,8 @@ export default function App() {
           </div>
           <div className="flex flex-wrap items-center justify-end gap-1.5 sm:gap-2">
             <button onClick={() => setShowTable(true)} className="rounded-xl border border-white/15 bg-white/5 px-2 py-2 text-[11px] font-semibold text-slate-200 transition hover:bg-white/10 sm:px-3 sm:text-sm">📋 Tabel Perkalian</button>
+            <button onClick={() => setShowSettings(true)} aria-label="Pengaturan" title="Pengaturan" className="rounded-xl border border-white/15 bg-white/5 px-2 py-2 text-[11px] font-semibold text-slate-200 transition hover:bg-white/10 sm:px-3 sm:text-sm">⚙️ Pengaturan</button>
             <button onClick={toggleMute} aria-label="Suara" className="rounded-xl border border-white/15 bg-white/5 px-2 py-2 text-xs font-semibold text-slate-200 transition hover:bg-white/10 sm:px-3 sm:text-sm">{muted ? "🔇" : "🔊"}</button>
-            <button onClick={toggleFullscreen} aria-label="Layar penuh" title="Layar penuh" className={`rounded-xl border px-2 py-2 text-[11px] font-semibold transition sm:px-3 sm:text-sm ${isFullscreen ? "border-sky-300/60 bg-sky-500/25 text-sky-100" : "border-white/15 bg-white/5 text-slate-200 hover:bg-white/10"}`}>{isFullscreen ? "⛶ Keluar" : "⛶ Penuh"}</button>
           </div>
         </header>
 
@@ -278,6 +279,7 @@ export default function App() {
       </div>
 
       {showTable && <TableModal maxNumber={maxNumber} onClose={() => setShowTable(false)} />}
+      {showSettings && <SettingsModal speedMult={speedMult} onChangeSpeed={changeSpeed} muted={muted} onToggleMute={toggleMute} isFullscreen={isFullscreen} onToggleFullscreen={toggleFullscreen} onClose={() => setShowSettings(false)} />}
     </div>
   );
 }
@@ -492,7 +494,7 @@ function GameScreen({
   const [stageWidth, setStageWidth] = useState(() => {
     if (typeof window === "undefined") return 960;
     const availableWidth = window.innerWidth - 24;
-    const availableHeight = window.innerHeight - 360;
+    const availableHeight = window.innerHeight - 245;
     return window.innerWidth > window.innerHeight
       ? Math.max(320, Math.min(availableWidth, availableHeight * (16 / 9)))
       : Math.max(280, Math.min(availableWidth, 960));
@@ -501,7 +503,7 @@ function GameScreen({
   useEffect(() => {
     const updateStageSize = () => {
       const availableWidth = window.innerWidth - 24;
-      const availableHeight = window.innerHeight - 360;
+      const availableHeight = window.innerHeight - 245;
       const nextWidth = window.innerWidth > window.innerHeight
         ? Math.max(320, Math.min(availableWidth, availableHeight * (16 / 9)))
         : Math.max(280, Math.min(availableWidth, 960));
@@ -696,74 +698,38 @@ function GameScreen({
             {toast.text}
           </div>
         )}
-      </div>
-
-      {/* how to answer */}
-      <div className="flex items-center justify-center gap-2 rounded-2xl border border-amber-300/30 bg-amber-400/10 px-4 py-2.5 text-center text-sm font-bold text-amber-100">
-        🤖⬆️ Lompat tepat di bawah kotak jawaban yang benar untuk <span className="text-amber-300">menyundulnya!</span>
-      </div>
-
-      <div className="flex min-w-0 flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <div className="flex w-full min-w-0 flex-wrap items-stretch gap-2 sm:w-auto sm:items-center">
-          <button
-            onPointerDown={(e) => {
-              e.preventDefault();
-              onJump();
-            }}
-            onContextMenu={(e) => e.preventDefault()}
-            aria-label="Lompat atau sundul"
-            className="min-h-12 flex-1 select-none touch-manipulation rounded-xl bg-gradient-to-r from-amber-400 to-orange-500 px-3 py-3 text-sm font-black text-slate-900 shadow-xl shadow-orange-500/30 transition active:scale-95 sm:flex-none sm:rounded-2xl sm:px-6 sm:py-4 sm:text-lg"
-          >
-            ⬆️ LOMPAT / SUNDUL
-            <span className="ml-1 hidden text-xs font-bold text-slate-800/70 sm:inline">(Spasi)</span>
-          </button>
-          <div className="flex items-center justify-center gap-1 rounded-xl border border-white/15 bg-white/5 p-1 sm:rounded-2xl sm:gap-1.5 sm:p-1.5">
-            <span className="hidden px-1 text-[10px] font-black uppercase tracking-wider text-slate-400 lg:inline">
-              Kecepatan
-            </span>
-            {([1, 2, 3] as const).map((m) => (
-              <button
-                key={m}
-                onClick={() => onChangeSpeed(m)}
-                aria-pressed={speedMult === m}
-                className={`min-h-10 min-w-10 touch-manipulation rounded-lg px-2 py-2 text-sm font-black transition sm:rounded-xl sm:px-3 ${
-                  speedMult === m
-                    ? "bg-gradient-to-r from-sky-400 to-indigo-500 text-white shadow-lg"
-                    : "text-slate-300 hover:bg-white/10"
-                }`}
-              >
-                {m}×
-              </button>
-            ))}
+        <div className="absolute inset-x-0 bottom-0 z-30 flex items-end justify-between gap-2 bg-gradient-to-t from-slate-950/95 via-slate-950/65 to-transparent px-2 pb-2 pt-8 sm:px-4 sm:pb-4">
+          <button onPointerDown={(e) => { e.preventDefault(); onJump(); }} onContextMenu={(e) => e.preventDefault()} aria-label="Lompat atau sundul" className="min-h-11 flex-1 select-none touch-manipulation rounded-xl bg-gradient-to-r from-amber-400 to-orange-500 px-3 py-2.5 text-sm font-black text-slate-950 shadow-lg active:scale-95 sm:min-h-14 sm:max-w-xs sm:rounded-2xl sm:px-5 sm:text-lg">⬆️ LOMPAT / SUNDUL</button>
+          <div className="flex shrink-0 gap-2">
+            <button onClick={onTogglePause} title="Jeda (P)" aria-label={paused ? "Lanjutkan permainan" : "Jeda permainan"} className="grid min-h-11 min-w-11 place-items-center rounded-xl border border-white/20 bg-slate-800/90 px-3 text-lg font-black text-white shadow-lg backdrop-blur sm:min-h-14 sm:min-w-14 sm:rounded-2xl sm:text-2xl">{paused ? "▶" : "⏸"}</button>
+            <button onClick={onToggleFullscreen} aria-label={isFullscreen ? "Keluar dari layar penuh" : "Layar penuh"} title="Layar penuh" className={`grid min-h-11 min-w-11 place-items-center rounded-xl border px-3 text-lg font-black shadow-lg backdrop-blur sm:min-h-14 sm:min-w-14 sm:rounded-2xl sm:text-2xl ${isFullscreen ? "border-sky-300/60 bg-sky-500/30 text-sky-100" : "border-white/20 bg-slate-800/90 text-white"}`}>⛶</button>
           </div>
-          <button
-            onClick={onTogglePause}
-            className="min-h-10 min-w-10 touch-manipulation rounded-xl border border-white/15 bg-white/10 px-3 py-2 text-sm font-black text-white transition hover:bg-white/20 active:scale-95 sm:rounded-2xl sm:px-4 sm:py-3"
-            title="Jeda (P)"
-            aria-label={paused ? "Lanjutkan permainan" : "Jeda permainan"}
-          >
-            {paused ? "▶" : "⏸"}
-          </button>
-          <button
-            onClick={onToggleFullscreen}
-            aria-label={isFullscreen ? "Keluar dari layar penuh" : "Layar penuh"}
-            className={`min-h-10 min-w-10 touch-manipulation rounded-xl border px-3 py-2 text-sm font-black transition active:scale-95 sm:rounded-2xl sm:px-4 sm:py-3 ${
-              isFullscreen
-                ? "border-sky-300/60 bg-sky-500/25 text-sky-100"
-                : "border-white/15 bg-white/10 text-white hover:bg-white/20"
-            }`}
-            title="Layar penuh"
-          >
-            ⛶
-          </button>
         </div>
-        <div className="text-right text-xs text-slate-400 sm:shrink-0">
-          🪙 <span className="font-bold text-amber-300">{hud.coins}</span> koin
-        </div>
+      </div>
+
+      <div className="flex items-center justify-center gap-2 rounded-xl border border-amber-300/25 bg-amber-400/10 px-2 py-1.5 text-center text-[11px] font-bold text-amber-100 sm:text-sm">
+        🤖⬆️ Lompat tepat di bawah jawaban yang benar untuk <span className="text-amber-300">menyundulnya!</span>
+        <span className="ml-2 shrink-0 text-amber-300">🪙 {hud.coins} koin</span>
       </div>
     </div>
   );
 }
+
+/* --------------------------------------------------------- settings modal */
+function SettingsModal({ speedMult, onChangeSpeed, muted, onToggleMute, isFullscreen, onToggleFullscreen, onClose }: {
+  speedMult: 1 | 2 | 3; onChangeSpeed: (m: 1 | 2 | 3) => void; muted: boolean; onToggleMute: () => void;
+  isFullscreen: boolean; onToggleFullscreen: () => void; onClose: () => void;
+}) {
+  return <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 p-4 backdrop-blur-sm" onClick={onClose}>
+    <div className="w-full max-w-md rounded-3xl border border-white/10 bg-slate-900 p-5 shadow-2xl sm:p-6" onClick={(e) => e.stopPropagation()}>
+      <div className="mb-5 flex items-center justify-between"><h3 className="text-xl font-black sm:text-2xl">⚙️ Pengaturan Game</h3><button onClick={onClose} className="rounded-xl border border-white/15 bg-white/5 px-3 py-2 font-bold">✕</button></div>
+      <p className="mb-3 text-sm font-bold text-slate-300">Kecepatan permainan</p>
+      <div className="grid grid-cols-3 gap-2">{([1,2,3] as const).map(m => <button key={m} onClick={() => onChangeSpeed(m)} aria-pressed={speedMult === m} className={`rounded-xl border px-3 py-3 font-black ${speedMult === m ? "border-sky-300 bg-gradient-to-r from-sky-400 to-indigo-500 text-white" : "border-white/10 bg-white/5 text-slate-300"}`}>{m}×<span className="mt-1 block text-xs">{m === 1 ? "Santai" : m === 2 ? "Sedang" : "Cepat"}</span></button>)}</div>
+      <div className="mt-4 grid grid-cols-2 gap-2"><button onClick={onToggleMute} className="rounded-xl border border-white/10 bg-white/5 px-3 py-3 text-sm font-bold">{muted ? "🔇 Suara Mati" : "🔊 Suara Aktif"}</button><button onClick={onToggleFullscreen} className="rounded-xl border border-white/10 bg-white/5 px-3 py-3 text-sm font-bold">{isFullscreen ? "⛶ Keluar Penuh" : "⛶ Layar Penuh"}</button></div>
+      <button onClick={onClose} className="mt-5 w-full rounded-xl bg-emerald-400 px-4 py-3 font-black text-slate-950">Selesai</button>
+    </div></div>;
+}
+
 
 function StatCard({
   label,
