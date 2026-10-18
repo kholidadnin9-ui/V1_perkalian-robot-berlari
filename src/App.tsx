@@ -489,6 +489,31 @@ function GameScreen({
 }) {
   const q = hud.question;
   const timerPct = Math.max(0, Math.min(1, hud.timeTotal ? hud.timeLeft / hud.timeTotal : 0));
+  const [stageWidth, setStageWidth] = useState(() => {
+    if (typeof window === "undefined") return 960;
+    const availableWidth = window.innerWidth - 24;
+    const availableHeight = window.innerHeight - 360;
+    return window.innerWidth > window.innerHeight
+      ? Math.max(320, Math.min(availableWidth, availableHeight * (16 / 9)))
+      : Math.max(280, Math.min(availableWidth, 960));
+  });
+
+  useEffect(() => {
+    const updateStageSize = () => {
+      const availableWidth = window.innerWidth - 24;
+      const availableHeight = window.innerHeight - 360;
+      const nextWidth = window.innerWidth > window.innerHeight
+        ? Math.max(320, Math.min(availableWidth, availableHeight * (16 / 9)))
+        : Math.max(280, Math.min(availableWidth, 960));
+      setStageWidth(nextWidth);
+    };
+    window.addEventListener("resize", updateStageSize);
+    window.addEventListener("orientationchange", updateStageSize);
+    return () => {
+      window.removeEventListener("resize", updateStageSize);
+      window.removeEventListener("orientationchange", updateStageSize);
+    };
+  }, []);
 
   return (
     <div className="flex flex-1 flex-col gap-3">
@@ -537,7 +562,10 @@ function GameScreen({
       </div>
 
       {/* stage */}
-      <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-slate-900 shadow-2xl">
+      <div
+        className="game-stage relative mx-auto overflow-hidden rounded-2xl border border-white/10 bg-slate-900 shadow-2xl sm:rounded-3xl"
+        style={{ width: `${stageWidth}px`, maxWidth: "100%" }}
+      >
         <div className="relative w-full" style={{ aspectRatio: "16 / 9" }}>
           <canvas ref={canvasRef} className="absolute inset-0 block h-full w-full" />
         </div>
@@ -593,9 +621,9 @@ function GameScreen({
         )}
 
         {/* question card */}
-        <div className="pointer-events-none absolute inset-x-0 top-0 z-10 flex justify-center p-2 sm:p-4">
+        <div className="pointer-events-none absolute inset-x-0 top-0 z-10 flex justify-center p-1.5 sm:p-2">
           <div
-            className={`pointer-events-auto w-full max-w-md rounded-2xl border px-3 py-2 shadow-2xl backdrop-blur-md transition sm:px-5 sm:py-3 ${
+            className={`game-question-card pointer-events-auto w-[88%] max-w-sm rounded-xl border px-2 py-1.5 shadow-xl backdrop-blur-md transition sm:px-3 sm:py-2 ${
               q
                 ? hud.phase === "boss"
                   ? "border-rose-400/60 bg-rose-950/85"
@@ -621,14 +649,14 @@ function GameScreen({
                     </span>
                   )}
                 </div>
-                <div className="mt-1 flex items-baseline justify-center gap-2">
-                  <span className="text-2xl font-black tabular-nums text-white min-[380px]:text-3xl sm:text-5xl">
+                <div className="mt-0.5 flex items-baseline justify-center gap-1.5 sm:gap-2">
+                  <span className="text-xl font-black tabular-nums text-white min-[380px]:text-2xl sm:text-3xl lg:text-4xl">
                     {q.a} × {q.b}
                   </span>
-                  <span className="text-xl font-black text-amber-300 min-[380px]:text-2xl sm:text-4xl">=</span>
-                  <span className="text-2xl font-black text-amber-300 min-[380px]:text-3xl sm:text-5xl">?</span>
+                  <span className="text-lg font-black text-amber-300 min-[380px]:text-xl sm:text-2xl lg:text-3xl">=</span>
+                  <span className="text-xl font-black text-amber-300 min-[380px]:text-2xl sm:text-3xl lg:text-4xl">?</span>
                 </div>
-                <div className="mt-2 h-2 w-full overflow-hidden rounded-full bg-white/15">
+                <div className="mt-1.5 h-1.5 w-full overflow-hidden rounded-full bg-white/15">
                   <div
                     className={`h-full rounded-full transition-[width] duration-75 ${
                       timerPct > 0.5
