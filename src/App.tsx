@@ -210,7 +210,7 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-[#070b18] text-white">
+    <div className="min-h-screen w-full overflow-x-hidden bg-[#070b18] text-white">
       {/* background decor */}
       <div className="pointer-events-none fixed inset-0 overflow-hidden">
         <div className="absolute -left-32 -top-32 h-96 w-96 rounded-full bg-sky-500/20 blur-3xl" />
@@ -218,57 +218,25 @@ export default function App() {
         <div className="absolute left-1/3 top-1/4 h-72 w-72 rounded-full bg-amber-500/10 blur-3xl" />
       </div>
 
-      <div className="relative mx-auto flex min-h-screen w-full max-w-6xl flex-col px-4 py-5 sm:px-6">
+      <div className="relative mx-auto flex min-h-screen w-full max-w-7xl min-w-0 flex-col px-2 py-3 sm:px-4 sm:py-4 lg:px-6 lg:py-5">
         {/* header */}
-        <header className="mb-4 flex items-center justify-between gap-3">
-          <div className="flex items-center gap-3">
-            <div className="grid h-12 w-12 shrink-0 place-items-center overflow-hidden rounded-2xl bg-gradient-to-br from-sky-400 to-indigo-600 p-1 shadow-lg shadow-indigo-500/30 ring-2 ring-amber-300/50">
-              <img
-                src={robotSprite}
-                alt="Robot emas"
-                className="h-full w-full object-contain drop-shadow"
-              />
+        <header className="mb-4 flex flex-wrap items-center justify-between gap-3">
+          <div className="flex min-w-0 flex-1 items-center gap-2 sm:gap-3">
+            <div className="grid h-10 w-10 shrink-0 place-items-center overflow-hidden rounded-2xl bg-gradient-to-br from-sky-400 to-indigo-600 p-1 shadow-lg shadow-indigo-500/30 ring-2 ring-amber-300/50 sm:h-12 sm:w-12">
+              <img src={robotSprite} alt="Robot emas" className="h-full w-full object-contain drop-shadow" />
             </div>
-            <div>
-              <h1 className="text-xl font-black tracking-tight sm:text-2xl">
-                RUN <span className="text-amber-300">&</span> HITUNG
-              </h1>
-              <p className="text-[11px] font-black uppercase leading-tight tracking-[0.14em] text-amber-300 sm:text-xs">
-                Created by: Widodo Guru SD
-              </p>
-              <p className="hidden text-xs text-slate-400 sm:block sm:text-sm">
-                Belajar perkalian 1–10 sambil berlari tanpa henti!
-              </p>
+            <div className="min-w-0">
+              <h1 className="text-xl font-black tracking-tight sm:text-2xl">RUN <span className="text-amber-300">&</span> HITUNG</h1>
+              <p className="text-[10px] font-black uppercase leading-tight tracking-[0.1em] text-amber-300 sm:text-xs sm:tracking-[0.14em]">Created by: Widodo Guru SD</p>
+              <p className="hidden text-xs text-slate-400 sm:block sm:text-sm">Belajar perkalian 1–10 sambil berlari tanpa henti!</p>
             </div>
           </div>
-          <div className="flex items-center gap-2">
-            <button
-              onClick={() => setShowTable(true)}
-              className="rounded-xl border border-white/15 bg-white/5 px-3 py-2 text-xs font-semibold text-slate-200 transition hover:bg-white/10 sm:text-sm"
-            >
-              📋 Tabel Perkalian
-            </button>
-          <button
-            onClick={toggleMute}
-            aria-label="Suara"
-            className="rounded-xl border border-white/15 bg-white/5 px-3 py-2 text-xs font-semibold text-slate-200 transition hover:bg-white/10 sm:text-sm"
-          >
-            {muted ? "🔇" : "🔊"}
-          </button>
-          <button
-            onClick={toggleFullscreen}
-            aria-label="Layar penuh"
-            title="Layar penuh"
-            className={`rounded-xl border px-3 py-2 text-xs font-semibold transition sm:text-sm ${
-              isFullscreen
-                ? "border-sky-300/60 bg-sky-500/25 text-sky-100"
-                : "border-white/15 bg-white/5 text-slate-200 hover:bg-white/10"
-            }`}
-          >
-            {isFullscreen ? "⛶ Keluar" : "⛶ Penuh"}
-          </button>
-        </div>
-      </header>
+          <div className="flex flex-wrap items-center justify-end gap-1.5 sm:gap-2">
+            <button onClick={() => setShowTable(true)} className="rounded-xl border border-white/15 bg-white/5 px-2 py-2 text-[11px] font-semibold text-slate-200 transition hover:bg-white/10 sm:px-3 sm:text-sm">📋 Tabel Perkalian</button>
+            <button onClick={toggleMute} aria-label="Suara" className="rounded-xl border border-white/15 bg-white/5 px-2 py-2 text-xs font-semibold text-slate-200 transition hover:bg-white/10 sm:px-3 sm:text-sm">{muted ? "🔇" : "🔊"}</button>
+            <button onClick={toggleFullscreen} aria-label="Layar penuh" title="Layar penuh" className={`rounded-xl border px-2 py-2 text-[11px] font-semibold transition sm:px-3 sm:text-sm ${isFullscreen ? "border-sky-300/60 bg-sky-500/25 text-sky-100" : "border-white/15 bg-white/5 text-slate-200 hover:bg-white/10"}`}>{isFullscreen ? "⛶ Keluar" : "⛶ Penuh"}</button>
+          </div>
+        </header>
 
         {screen === "menu" && (
           <MenuScreen
@@ -654,11 +622,11 @@ function GameScreen({
                   )}
                 </div>
                 <div className="mt-1 flex items-baseline justify-center gap-2">
-                  <span className="text-3xl font-black tabular-nums text-white sm:text-5xl">
+                  <span className="text-2xl font-black tabular-nums text-white min-[380px]:text-3xl sm:text-5xl">
                     {q.a} × {q.b}
                   </span>
-                  <span className="text-2xl font-black text-amber-300 sm:text-4xl">=</span>
-                  <span className="text-3xl font-black text-amber-300 sm:text-5xl">?</span>
+                  <span className="text-xl font-black text-amber-300 min-[380px]:text-2xl sm:text-4xl">=</span>
+                  <span className="text-2xl font-black text-amber-300 min-[380px]:text-3xl sm:text-5xl">?</span>
                 </div>
                 <div className="mt-2 h-2 w-full overflow-hidden rounded-full bg-white/15">
                   <div
@@ -707,27 +675,30 @@ function GameScreen({
         🤖⬆️ Lompat tepat di bawah kotak jawaban yang benar untuk <span className="text-amber-300">menyundulnya!</span>
       </div>
 
-      <div className="flex items-center justify-between gap-3">
-        <div className="flex items-center gap-2">
+      <div className="flex min-w-0 flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex w-full min-w-0 flex-wrap items-stretch gap-2 sm:w-auto sm:items-center">
           <button
             onPointerDown={(e) => {
               e.preventDefault();
               onJump();
             }}
-            className="inline-flex select-none items-center gap-2 rounded-2xl bg-gradient-to-r from-amber-400 to-orange-500 px-8 py-4 text-base font-black text-slate-900 shadow-xl shadow-orange-500/30 transition active:scale-95 sm:text-lg"
+            onContextMenu={(e) => e.preventDefault()}
+            aria-label="Lompat atau sundul"
+            className="min-h-12 flex-1 select-none touch-manipulation rounded-xl bg-gradient-to-r from-amber-400 to-orange-500 px-3 py-3 text-sm font-black text-slate-900 shadow-xl shadow-orange-500/30 transition active:scale-95 sm:flex-none sm:rounded-2xl sm:px-6 sm:py-4 sm:text-lg"
           >
             ⬆️ LOMPAT / SUNDUL
-            <span className="hidden text-xs font-bold text-slate-800/70 sm:inline">(Spasi)</span>
+            <span className="ml-1 hidden text-xs font-bold text-slate-800/70 sm:inline">(Spasi)</span>
           </button>
-          <div className="flex items-center gap-1.5 rounded-2xl border border-white/15 bg-white/5 p-1.5">
-            <span className="hidden px-1 text-[10px] font-black uppercase tracking-wider text-slate-400 sm:inline">
+          <div className="flex items-center justify-center gap-1 rounded-xl border border-white/15 bg-white/5 p-1 sm:rounded-2xl sm:gap-1.5 sm:p-1.5">
+            <span className="hidden px-1 text-[10px] font-black uppercase tracking-wider text-slate-400 lg:inline">
               Kecepatan
             </span>
             {([1, 2, 3] as const).map((m) => (
               <button
                 key={m}
                 onClick={() => onChangeSpeed(m)}
-                className={`rounded-xl px-3 py-2 text-sm font-black transition ${
+                aria-pressed={speedMult === m}
+                className={`min-h-10 min-w-10 touch-manipulation rounded-lg px-2 py-2 text-sm font-black transition sm:rounded-xl sm:px-3 ${
                   speedMult === m
                     ? "bg-gradient-to-r from-sky-400 to-indigo-500 text-white shadow-lg"
                     : "text-slate-300 hover:bg-white/10"
@@ -739,24 +710,26 @@ function GameScreen({
           </div>
           <button
             onClick={onTogglePause}
-            className="rounded-2xl border border-white/15 bg-white/10 px-4 py-3 text-sm font-black text-white transition hover:bg-white/20 active:scale-95"
+            className="min-h-10 min-w-10 touch-manipulation rounded-xl border border-white/15 bg-white/10 px-3 py-2 text-sm font-black text-white transition hover:bg-white/20 active:scale-95 sm:rounded-2xl sm:px-4 sm:py-3"
             title="Jeda (P)"
+            aria-label={paused ? "Lanjutkan permainan" : "Jeda permainan"}
           >
             {paused ? "▶" : "⏸"}
           </button>
           <button
             onClick={onToggleFullscreen}
-            className={`rounded-2xl border px-4 py-3 text-sm font-black transition active:scale-95 ${
+            aria-label={isFullscreen ? "Keluar dari layar penuh" : "Layar penuh"}
+            className={`min-h-10 min-w-10 touch-manipulation rounded-xl border px-3 py-2 text-sm font-black transition active:scale-95 sm:rounded-2xl sm:px-4 sm:py-3 ${
               isFullscreen
                 ? "border-sky-300/60 bg-sky-500/25 text-sky-100"
                 : "border-white/15 bg-white/10 text-white hover:bg-white/20"
             }`}
             title="Layar penuh"
           >
-            {isFullscreen ? "⛶" : "⛶"}
+            ⛶
           </button>
         </div>
-        <div className="text-right text-xs text-slate-400">
+        <div className="text-right text-xs text-slate-400 sm:shrink-0">
           🪙 <span className="font-bold text-amber-300">{hud.coins}</span> koin
         </div>
       </div>
