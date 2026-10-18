@@ -1,54 +1,137 @@
+
 @import "tailwindcss";
 
 @theme {
-  --font-sans: "Nunito", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-sans: "Nunito", ui-sans-serif, system-ui, -apple-system,
+    "Segoe UI", sans-serif;
 }
 
-@keyframes pop {
-  0% {
-    transform: translate(-50%, 12px) scale(0.9);
-    opacity: 0;
-  }
-  60% {
-    transform: translate(-50%, -4px) scale(1.04);
-    opacity: 1;
-  }
-  100% {
-    transform: translate(-50%, 0) scale(1);
-    opacity: 1;
-  }
+/* Reset dasar agar layout mengikuti ukuran perangkat */
+* {
+  box-sizing: border-box;
 }
 
-html,
+html {
+  min-height: 100%;
+  width: 100%;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
 body,
 #root {
+  margin: 0;
   min-height: 100%;
+  width: 100%;
 }
 
 body {
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   background: #070b18;
+  overflow-x: hidden;
 }
 
+/* Media tidak boleh melampaui layar */
+img,
+video,
+svg {
+  max-width: 100%;
+}
+
+/* Canvas game */
 canvas {
   display: block;
-  touch-action: manipulation;
+  max-width: 100%;
+  touch-action: none;
 }
 
+/* Animasi robot */
 @keyframes robot-charge {
-  0%, 100% { transform: translateY(0) rotate(-2deg); }
-  50% { transform: translate(8px, -8px) rotate(1deg); }
+  0%, 100% {
+    transform: translateY(0) rotate(-2deg);
+  }
+
+  50% {
+    transform: translate(8px, -8px) rotate(1deg);
+  }
 }
 
 @keyframes monster-hover {
-  0%, 100% { transform: translateY(0) rotate(0); }
-  50% { transform: translateY(-6px) rotate(-1deg); }
+  0%, 100% {
+    transform: translateY(0) rotate(0);
+  }
+
+  50% {
+    transform: translateY(-6px) rotate(-1deg);
+  }
 }
 
-.hero-robot { animation: robot-charge 2.2s ease-in-out infinite; }
-.hero-monster { animation: monster-hover 3.1s ease-in-out infinite; }
+.hero-robot {
+  animation: robot-charge 2.2s ease-in-out infinite;
+}
 
+.hero-monster {
+  animation: monster-hover 3.1s ease-in-out infinite;
+}
+
+/* Tablet */
+@media (max-width: 1024px) {
+  .hero-robot {
+    animation-duration: 2.5s;
+  }
+
+  .hero-monster {
+    animation-duration: 3.4s;
+  }
+}
+
+/* HP */
+@media (max-width: 640px) {
+  html,
+  body,
+  #root {
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  body {
+    font-size: 14px;
+  }
+
+  canvas {
+    max-width: 100%;
+  }
+
+  .hero-robot {
+    animation: none;
+  }
+
+  .hero-monster {
+    animation: none;
+  }
+}
+
+/* HP dalam posisi landscape */
+@media (max-height: 500px) and (orientation: landscape) {
+  body {
+    overflow-x: hidden;
+  }
+
+  .hero-robot,
+  .hero-monster {
+    animation: none;
+  }
+}
+
+/* Hormati preferensi pengguna yang mengurangi animasi */
 @media (prefers-reduced-motion: reduce) {
-  .hero-robot, .hero-monster { animation: none; }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+  }
 }
