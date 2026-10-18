@@ -6,7 +6,9 @@
     "Segoe UI", sans-serif;
 }
 
-/* Reset dasar agar layout mengikuti ukuran perangkat */
+/* ================================
+   RESET DASAR
+================================ */
 * {
   box-sizing: border-box;
 }
@@ -33,23 +35,30 @@ body {
   overflow-x: hidden;
 }
 
-/* Media tidak boleh melampaui layar */
+/* ================================
+   MEDIA RESPONSIF
+================================ */
 img,
 video,
 svg {
   max-width: 100%;
 }
 
-/* Canvas game */
+/* ================================
+   CANVAS GAME
+================================ */
 canvas {
   display: block;
   max-width: 100%;
   touch-action: none;
 }
 
-/* Animasi robot */
+/* ================================
+   ANIMASI ROBOT
+================================ */
 @keyframes robot-charge {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0) rotate(-2deg);
   }
 
@@ -59,7 +68,8 @@ canvas {
 }
 
 @keyframes monster-hover {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0) rotate(0);
   }
 
@@ -76,7 +86,23 @@ canvas {
   animation: monster-hover 3.1s ease-in-out infinite;
 }
 
-/* Tablet */
+/* ================================
+   PENGATURAN AREA GAME
+================================ */
+.game-stage {
+  isolation: isolate;
+  width: 100%;
+  max-width: 100%;
+  margin-inline: auto;
+}
+
+.game-question-card {
+  line-height: 1.1;
+}
+
+/* ================================
+   TABLET
+================================ */
 @media (max-width: 1024px) {
   .hero-robot {
     animation-duration: 2.5s;
@@ -87,7 +113,9 @@ canvas {
   }
 }
 
-/* HP */
+/* ================================
+   HP - PORTRAIT
+================================ */
 @media (max-width: 640px) {
   html,
   body,
@@ -104,17 +132,25 @@ canvas {
     max-width: 100%;
   }
 
-  .hero-robot {
-    animation: none;
-  }
-
+  .hero-robot,
   .hero-monster {
     animation: none;
   }
+
+  .game-stage {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .game-question-card {
+    max-width: 88%;
+  }
 }
 
-/* HP dalam posisi landscape */
-@media (max-height: 500px) and (orientation: landscape) {
+/* ================================
+   HP - LANDSCAPE
+================================ */
+@media (max-height: 520px) and (orientation: landscape) {
   body {
     overflow-x: hidden;
   }
@@ -123,9 +159,20 @@ canvas {
   .hero-monster {
     animation: none;
   }
+
+  .game-stage {
+    max-width: 100%;
+  }
+
+  .game-question-card {
+    transform: scale(0.88);
+    transform-origin: top center;
+  }
 }
 
-/* Hormati preferensi pengguna yang mengurangi animasi */
+/* ================================
+   AKSESIBILITAS ANIMASI
+================================ */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -133,5 +180,9 @@ canvas {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     scroll-behavior: auto !important;
+  }
+
+  .game-question-card {
+    transition: none;
   }
 }
