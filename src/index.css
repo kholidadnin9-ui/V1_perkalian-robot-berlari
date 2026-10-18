@@ -1,188 +1,50 @@
-
 @import "tailwindcss";
 
 @theme {
-  --font-sans: "Nunito", ui-sans-serif, system-ui, -apple-system,
-    "Segoe UI", sans-serif;
+  --font-sans: "Nunito", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
 }
 
-/* ================================
-   RESET DASAR
-================================ */
-* {
-  box-sizing: border-box;
-}
+* { box-sizing: border-box; }
+html { min-height: 100%; width: 100%; -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+body, #root { margin: 0; min-height: 100%; width: 100%; }
+body { font-family: var(--font-sans); -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; background: #070b18; overflow-x: hidden; }
+img, video, svg { max-width: 100%; }
+canvas { display: block; max-width: 100%; touch-action: none; }
 
-html {
-  min-height: 100%;
-  width: 100%;
-  -webkit-text-size-adjust: 100%;
-  text-size-adjust: 100%;
-}
-
-body,
-#root {
-  margin: 0;
-  min-height: 100%;
-  width: 100%;
-}
-
-body {
-  font-family: var(--font-sans);
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  background: #070b18;
-  overflow-x: hidden;
-}
-
-/* ================================
-   MEDIA RESPONSIF
-================================ */
-img,
-video,
-svg {
-  max-width: 100%;
-}
-
-/* ================================
-   CANVAS GAME
-================================ */
-canvas {
-  display: block;
-  max-width: 100%;
-  touch-action: none;
-}
-
-/* ================================
-   ANIMASI ROBOT
-================================ */
 @keyframes robot-charge {
-  0%,
-  100% {
-    transform: translateY(0) rotate(-2deg);
-  }
-
-  50% {
-    transform: translate(8px, -8px) rotate(1deg);
-  }
+  0%, 100% { transform: translateY(0) rotate(-2deg); }
+  50% { transform: translate(8px, -8px) rotate(1deg); }
 }
-
 @keyframes monster-hover {
-  0%,
-  100% {
-    transform: translateY(0) rotate(0);
-  }
-
-  50% {
-    transform: translateY(-6px) rotate(-1deg);
-  }
+  0%, 100% { transform: translateY(0) rotate(0); }
+  50% { transform: translateY(-6px) rotate(-1deg); }
 }
+.hero-robot { animation: robot-charge 2.2s ease-in-out infinite; }
+.hero-monster { animation: monster-hover 3.1s ease-in-out infinite; }
 
-.hero-robot {
-  animation: robot-charge 2.2s ease-in-out infinite;
-}
+/* Arena dan kartu soal */
+.game-stage { isolation: isolate; width: 100%; max-width: 100%; margin-inline: auto; }
+.game-question-card { line-height: 1.1; }
 
-.hero-monster {
-  animation: monster-hover 3.1s ease-in-out infinite;
-}
-
-/* ================================
-   PENGATURAN AREA GAME
-================================ */
-.game-stage {
-  isolation: isolate;
-  width: 100%;
-  max-width: 100%;
-  margin-inline: auto;
-}
-
-.game-question-card {
-  line-height: 1.1;
-}
-
-/* ================================
-   TABLET
-================================ */
 @media (max-width: 1024px) {
-  .hero-robot {
-    animation-duration: 2.5s;
-  }
-
-  .hero-monster {
-    animation-duration: 3.4s;
-  }
+  .hero-robot { animation-duration: 2.5s; }
+  .hero-monster { animation-duration: 3.4s; }
 }
-
-/* ================================
-   HP - PORTRAIT
-================================ */
 @media (max-width: 640px) {
-  html,
-  body,
-  #root {
-    min-width: 0;
-    max-width: 100%;
-  }
-
-  body {
-    font-size: 14px;
-  }
-
-  canvas {
-    max-width: 100%;
-  }
-
-  .hero-robot,
-  .hero-monster {
-    animation: none;
-  }
-
-  .game-stage {
-    width: 100%;
-    max-width: 100%;
-  }
-
-  .game-question-card {
-    max-width: 88%;
-  }
+  html, body, #root { min-width: 0; max-width: 100%; }
+  body { font-size: 14px; }
+  canvas { max-width: 100%; }
+  .hero-robot, .hero-monster { animation: none; }
+  .game-stage { width: 100%; max-width: 100%; }
+  .game-question-card { max-width: 88%; }
 }
-
-/* ================================
-   HP - LANDSCAPE
-================================ */
 @media (max-height: 520px) and (orientation: landscape) {
-  body {
-    overflow-x: hidden;
-  }
-
-  .hero-robot,
-  .hero-monster {
-    animation: none;
-  }
-
-  .game-stage {
-    max-width: 100%;
-  }
-
-  .game-question-card {
-    transform: scale(0.88);
-    transform-origin: top center;
-  }
+  body { overflow-x: hidden; }
+  .hero-robot, .hero-monster { animation: none; }
+  .game-stage { max-width: 100%; }
+  .game-question-card { transform: scale(.88); transform-origin: top center; }
 }
-
-/* ================================
-   AKSESIBILITAS ANIMASI
-================================ */
 @media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    scroll-behavior: auto !important;
-  }
-
-  .game-question-card {
-    transition: none;
-  }
+  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; }
+  .game-question-card { transition: none; }
 }
