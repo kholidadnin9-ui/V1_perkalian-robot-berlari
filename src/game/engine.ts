@@ -170,6 +170,8 @@ export class GameEngine {
   private last = 0;
   private hudTimer = 0;
   private scale = 1;
+  private offsetX = 0;
+  private offsetY = 0;
   private resizeObserver: ResizeObserver | null = null;
 
   // world state
@@ -267,13 +269,18 @@ export class GameEngine {
     const rect = this.canvas.getBoundingClientRect();
     if (rect.width < 10) return;
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
-    const w = Math.round(rect.width * dpr);
-    const h = Math.round(rect.height * dpr);
+    const w = Math.max(1, Math.round(rect.width * dpr));
+    const h = Math.max(1, Math.round(rect.height * dpr));
     if (this.canvas.width !== w || this.canvas.height !== h) {
       this.canvas.width = w;
       this.canvas.height = h;
     }
-    this.scale = this.canvas.width / VIEW_W;
+
+    // Keep the 960×540 game world proportional on every screen. If the
+    // canvas container is not exactly 16:9, letterbox instead of cropping.
+    this.scale = Math.min(this.canvas.width / VIEW_W, this.canvas.height / VIEW_H);
+    this.offsetX = (this.canvas.width - VIEW_W * this.scale) / 2;
+    this.offsetY = (this.canvas.height - VIEW_H * this.scale) / 2;
   }
 
   private loop = (ts: number) => {
@@ -1400,8 +1407,11 @@ export class GameEngine {
 
   private render() {
     const ctx = this.ctx;
-    ctx.setTransform(this.scale, 0, 0, this.scale, 0, 0);
-    ctx.clearRect(0, 0, VIEW_W, VIEW_H);
+    // Clear the complete physical canvas first, then draw the fixed game
+    // world centered with a uniform scale (no stretching or clipped edges).
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    ctx.setTransform(this.scale, 0, 0, this.scale, this.offsetX, this.offsetY);
     ctx.save();
     if (this.shake > 0) {
       ctx.translate((Math.random() - 0.5) * this.shake, (Math.random() - 0.5) * this.shake);
